@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:digital_blogger_task/main.dart';
+import 'package:digital_blogger_task/utils/widgets/dialog_helper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,8 @@ class NotificationService {
   NotificationService._internal();
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _localNotifications =
+      FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
     await _requestPermissions();
@@ -21,7 +24,10 @@ class NotificationService {
 
   Future<void> _requestPermissions() async {
     if (Platform.isIOS) {
-      await _firebaseMessaging.requestPermission();
+      final settings = await _firebaseMessaging.requestPermission();
+      if (settings.authorizationStatus == AuthorizationStatus.denied) {
+        print("🚫 Notification permission denied.");
+      }
     }
   }
 
@@ -53,8 +59,21 @@ class NotificationService {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("📨 Foreground message: ${message.notification?.title}");
 
-      // Show local notification
-      _showLocalNotification(message);
+      final context = navigatorKey.currentContext;
+      if (context == null) return;
+
+      final title = message.notification?.title ?? "New Notification";
+      final body = message.notification?.body ?? "You have a new message.";
+
+      DialogHelper.showInfo(
+        context,
+        body,
+        title: title,
+        backgroundColor: Colors.blue.shade700,
+      );
+
+      // Optional: To show a native/local notification too
+      // _showLocalNotification(message);
     });
   }
 
@@ -82,7 +101,8 @@ class NotificationService {
   }
 
   Future<void> _showLocalNotification(RemoteMessage message) async {
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
       'channel_id',
       'Default Channel',
       importance: Importance.high,
