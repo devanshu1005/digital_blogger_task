@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1012385644368",
+    "project_id": "digital-blogger-task",
+    "storage_bucket": "digital-blogger-task.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012385644368:android:19be8bee6239fa47617655",
+        "android_client_info": {
+          "package_name": "com.example.digital_blogger_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF56F9EWgGMebzFYmslsV8E5u19BBQvGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
