@@ -2,9 +2,9 @@ import 'package:digital_blogger_task/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AppFonts {
-  AppFonts._(); // Prevent instantiation
+  AppFonts._(); 
 
-  static const String fontFamily = 'Roboto'; // Or any custom font you added
+  static const String fontFamily = 'Roboto'; 
 
   static const TextStyle headlineLarge = TextStyle(
     fontSize: 32,

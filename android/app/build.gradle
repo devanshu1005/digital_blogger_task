@@ -29,6 +29,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -49,3 +50,16 @@ afterEvaluate {
         dependsOn "processDebugGoogleServices"
     }
 }
+
+afterEvaluate {
+    tasks.matching { it.name == "mapReleaseSourceSetPaths" }.configureEach {
+        dependsOn "processReleaseGoogleServices"
+    }
+}
+
+afterEvaluate {
+    tasks.matching { it.name == "mergeReleaseResources" }.configureEach {
+        dependsOn "processReleaseGoogleServices"
+    }
+}
+

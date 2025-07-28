@@ -49,7 +49,6 @@ class NotificationService {
     await _localNotifications.initialize(
       InitializationSettings(android: androidInit, iOS: iOSInit),
       onDidReceiveNotificationResponse: (payload) {
-        // Handle tapped notification from background/terminated
         _onNotificationTap(payload.payload);
       },
     );
@@ -82,7 +81,6 @@ class NotificationService {
       _onNotificationTap(message.data);
     });
 
-    // For terminated state
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       if (message != null) {
         _onNotificationTap(message.data);
@@ -91,13 +89,20 @@ class NotificationService {
   }
 
   void _onNotificationTap(dynamic data) {
-    // Navigate based on notification data
     print("🧭 Navigate based on: $data");
 
-    // Example:
-    // if (data['screen'] == 'chat') {
-    //   Get.to(() => ChatScreen(chatId: data['chatId']));
-    // }
+    final context = navigatorKey.currentContext;
+    if (context == null) return;
+
+    final screen = data['screen'];
+
+    if (screen == 'video') {
+      navigatorKey.currentState?.pushNamed('/video-stream');
+    } else if (screen == 'home') {
+      navigatorKey.currentState?.pushNamed('/home');
+    } else if (screen == 'notification-test') {
+      navigatorKey.currentState?.pushNamed('/notification-test');
+    }
   }
 
   Future<void> _showLocalNotification(RemoteMessage message) async {
@@ -117,7 +122,7 @@ class NotificationService {
       message.notification?.title,
       message.notification?.body,
       platformDetails,
-      payload: message.data.toString(), // can be JSON string too
+      payload: message.data.toString(), 
     );
   }
 }
